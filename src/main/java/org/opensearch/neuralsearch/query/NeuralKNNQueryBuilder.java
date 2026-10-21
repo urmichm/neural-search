@@ -157,6 +157,8 @@ public class NeuralKNNQueryBuilder extends AbstractQueryBuilder<NeuralKNNQueryBu
          */
         private String originalQueryText;
 
+        private String queryName;
+
         /**
          * Private constructor to enforce the builder pattern
          */
@@ -269,6 +271,11 @@ public class NeuralKNNQueryBuilder extends AbstractQueryBuilder<NeuralKNNQueryBu
          */
         public Builder originalQueryText(String originalQueryText) {
             this.originalQueryText = originalQueryText;
+            return this;
+        }
+
+        public Builder queryName(String queryName) {
+            this.queryName = queryName;
             return this;
         }
 
