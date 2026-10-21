@@ -48,7 +48,7 @@ import static org.opensearch.knn.index.query.KNNQueryBuilder.RESCORE_FIELD;
  * allowing for vector similarity search with additional neural search context.
  */
 
-@Getter
+@Getter  // TODO: ISSUE-2019
 public class NeuralKNNQueryBuilder extends AbstractQueryBuilder<NeuralKNNQueryBuilder> implements WithFieldName {
     /**
      * The name of the query
