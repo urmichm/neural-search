@@ -52,7 +52,7 @@ import static org.opensearch.knn.index.query.KNNQueryBuilder.RESCORE_FIELD;
  * allowing for vector similarity search with additional neural search context.
  */
 
-@Getter
+@Getter  // TODO: ISSUE-2019
 public class NeuralKNNQueryBuilder extends AbstractQueryBuilder<NeuralKNNQueryBuilder> implements WithFieldName {
     /**
      * The name of the query
@@ -156,6 +156,8 @@ public class NeuralKNNQueryBuilder extends AbstractQueryBuilder<NeuralKNNQueryBu
          * The original text query that was used to generate the vector
          */
         private String originalQueryText;
+
+        private String queryName;
 
         /**
          * Private constructor to enforce the builder pattern
@@ -269,6 +271,11 @@ public class NeuralKNNQueryBuilder extends AbstractQueryBuilder<NeuralKNNQueryBu
          */
         public Builder originalQueryText(String originalQueryText) {
             this.originalQueryText = originalQueryText;
+            return this;
+        }
+
+        public Builder queryName(String queryName) {
+            this.queryName = queryName;
             return this;
         }
 

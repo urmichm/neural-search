@@ -123,7 +123,7 @@ import static org.opensearch.neuralsearch.processor.EmbeddingContentType.QUERY;
 @Getter
 @Setter
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE) // TODO: ISSUE-2019
 public class NeuralQueryBuilder extends AbstractNeuralQueryBuilder<NeuralQueryBuilder> implements WithFieldName {
 
     public static final String NAME = "neural";
