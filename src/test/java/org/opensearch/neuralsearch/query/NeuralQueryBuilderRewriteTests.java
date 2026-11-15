@@ -235,6 +235,25 @@ public class NeuralQueryBuilderRewriteTests extends OpenSearchTestCase {
         assertEquals(expected, queryBuilder);
     }
 
+    public void testRewrite_whenQueryNameSet_v3_0_0_thenPreserveQueryName() {
+        setUpClusterService(Version.V_3_0_0);
+        NeuralQueryBuilder neuralQueryBuilder = NeuralQueryBuilder.builder()
+            .fieldName(FIELD_NAME)
+            .queryText(QUERY_TEXT)
+            .modelId(MODEL_ID)
+            .k(K)
+            .queryName("named_neural_query")
+  //              .boost(3.4f) // additional check, another test
+            .vectorSupplier(TEST_VECTOR_SUPPLIER)
+            .build();
+
+        QueryBuilder rewritten = neuralQueryBuilder.doRewrite(null);
+
+        assertTrue(rewritten instanceof NeuralKNNQueryBuilder);
+        assertEquals("named_neural_query", rewritten.queryName());
+//        assertEquals(3.4f, rewritten.boost()); // additional check, another test
+    }
+
     public void testRewrite_whenFilterSet_v3_0_0_thenKNNQueryBuilderFilterSet() {
         setUpClusterService(Version.V_3_0_0);
         NeuralQueryBuilder neuralQueryBuilder = NeuralQueryBuilder.builder()
