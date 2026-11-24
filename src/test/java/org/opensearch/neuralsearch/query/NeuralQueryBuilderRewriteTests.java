@@ -74,6 +74,8 @@ public class NeuralQueryBuilderRewriteTests extends OpenSearchTestCase {
     private static final String FIELD_NAME = "testField";
     private static final String CUSTOM_SEMANTIC_INFO_FIELD_NAME = "custom_semantic_info_field";
     private static final String QUERY_TEXT = "Hello world!";
+    private static final String QUERY_NAME = "query-name";
+    private static final float QUERY_BOOST = 1.75f;
     private static final String IMAGE_TEXT = "base641234567890";
     private static final String MODEL_ID = "mfgfgdsfgfdgsde";
     private static final Integer K = 10;
@@ -233,6 +235,42 @@ public class NeuralQueryBuilderRewriteTests extends OpenSearchTestCase {
 
         QueryBuilder queryBuilder = neuralQueryBuilder.doRewrite(null);
         assertEquals(expected, queryBuilder);
+    }
+
+    public void testRewrite_whenQueryNameSet_v3_0_0_thenPreserveQueryName() {
+        setUpClusterService(Version.V_3_0_0);
+        NeuralQueryBuilder neuralQueryBuilder = NeuralQueryBuilder.builder()
+            .fieldName(FIELD_NAME)
+            .queryText(QUERY_TEXT)
+            .modelId(MODEL_ID)
+            .k(K)
+            .queryName(QUERY_NAME)
+            .vectorSupplier(TEST_VECTOR_SUPPLIER)
+            .build();
+
+        QueryBuilder rewritten = neuralQueryBuilder.doRewrite(null);
+
+        assertTrue(rewritten instanceof NeuralKNNQueryBuilder);
+        assertEquals(QUERY_NAME, rewritten.queryName());
+    }
+
+    public void testRewrite_whenQueryNameSet_v3_0_0_thenPreserveQueryNameAndBoost() {
+        setUpClusterService(Version.V_3_0_0);
+        NeuralQueryBuilder neuralQueryBuilder = NeuralQueryBuilder.builder()
+                .fieldName(FIELD_NAME)
+                .queryText(QUERY_TEXT)
+                .modelId(MODEL_ID)
+                .k(K)
+                .queryName(QUERY_NAME)
+                .boost(QUERY_BOOST)
+                .vectorSupplier(TEST_VECTOR_SUPPLIER)
+                .build();
+
+        QueryBuilder rewritten = neuralQueryBuilder.doRewrite(null);
+
+        assertTrue(rewritten instanceof NeuralKNNQueryBuilder);
+        assertEquals(QUERY_BOOST, rewritten.boost());
+        assertEquals(QUERY_NAME, rewritten.queryName());
     }
 
     public void testRewrite_whenFilterSet_v3_0_0_thenKNNQueryBuilderFilterSet() {
